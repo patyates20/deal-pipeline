@@ -120,7 +120,7 @@
     font-weight: 700;
     color: var(--text-muted);
     border-bottom: 1px solid var(--line);
-    white-space: nowrap;
+    line-height: 1.35;
   }
   table.deals thead th.num { text-align: right; }
 
@@ -244,14 +244,38 @@
     border-bottom: 1px solid var(--line);
     border-top: none;
   }
+  tr.deal-detail .biz-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
   tr.deal-detail .biz-type {
     font-size: 10.5px;
     font-weight: 800;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--mint);
-    margin-bottom: 10px;
   }
+  tr.deal-detail .biz-site {
+    color: var(--mint);
+    font-size: 11.5px;
+    font-weight: 700;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    border-bottom: 1px dashed rgba(184,247,184,0.3);
+    transition: border 0.15s;
+  }
+  tr.deal-detail .biz-site:hover { border-bottom-color: var(--mint); }
+  tr.deal-detail .biz-site::after { content: " ↗"; opacity: 0.6; font-size: 10px; }
+  tr.deal-detail .biz-site.tbd {
+    color: var(--text-muted);
+    font-style: italic;
+    border-bottom: none;
+  }
+  tr.deal-detail .biz-site.tbd::after { content: ""; }
   tr.deal-detail .detail-text {
     font-size: 13.5px;
     line-height: 1.7;
@@ -615,8 +639,8 @@
         <th></th>
         <th class="num">List Price</th>
         <th class="num">SDE</th>
-        <th class="num">Cash @ Close</th>
-        <th class="num">Deferred</th>
+        <th class="num">Closing Commission</th>
+        <th class="num">Deferred Commission</th>
       </tr>
     </thead>
     <tbody>
@@ -647,7 +671,10 @@
       </tr>
       <tr class="deal-detail" id="d-chart" hidden>
         <td colspan="5">
-          <div class="biz-type">Software-as-a-Service · Trading Platform</div>
+          <div class="biz-row">
+            <div class="biz-type">Software-as-a-Service · Trading Platform</div>
+            <a class="biz-site" href="https://chartprime.com" target="_blank" rel="noopener">chartprime.com</a>
+          </div>
           <div class="detail-text">A SaaS trading analytics platform serving professional traders, with subscription-based revenue, strong margins, and an established customer base. Founders <b>Loyal Companies</b> are in active diligence with quality-of-earnings firm Tanner LLP. Listed at $32.5M with a 7.18x SDE multiple. Structured at <b>5% flat commission</b> rate, with $22.5M cash at close (equity roll included) and $10M seller financed.</div>
           <div class="meta-strip">
             <div class="meta-item">
@@ -674,7 +701,10 @@
       </tr>
       <tr class="deal-detail" id="d-light" hidden>
         <td colspan="5">
-          <div class="biz-type">Protective Products Brand · Inventory Included</div>
+          <div class="biz-row">
+            <div class="biz-type">Protective Products Brand · Inventory Included</div>
+            <a class="biz-site" href="https://lightarmor.us" target="_blank" rel="noopener">lightarmor.us</a>
+          </div>
           <div class="detail-text">A direct-to-consumer protective products brand with a strong <b>57% margin</b> and established channels. Buyer <b>Cooper Truss</b> signed LOI April 29; backup buyer AZL Tech standing by at ask price. Estimated 85% cash at close with a seller note of approximately $1.6M.</div>
           <div class="meta-strip">
             <div class="meta-item">
@@ -701,7 +731,10 @@
       </tr>
       <tr class="deal-detail" id="d-mvrk" hidden>
         <td colspan="5">
-          <div class="biz-type">Amazon FBA · Fitness Brand</div>
+          <div class="biz-row">
+            <div class="biz-type">Amazon FBA · Fitness Brand</div>
+            <span class="biz-site tbd">Amazon storefront primary</span>
+          </div>
           <div class="detail-text">An Amazon FBA fitness brand specializing in weighted vests and tactical chest packs. Counter on the table at <b>$2M business + $200K seller note (1yr @ 4%) + inventory</b>, with SBA-backed operator <b>Mark Brooks (Applied Vision Baseball)</b> as the lead buyer. Awaiting response on the counter. Multiple backup buyers active.</div>
           <div class="meta-strip">
             <div class="meta-item">
@@ -737,7 +770,10 @@
       </tr>
       <tr class="deal-detail" id="d-char" hidden>
         <td colspan="5">
-          <div class="biz-type">Ecommerce · Accessories Brand</div>
+          <div class="biz-row">
+            <div class="biz-type">Ecommerce · Accessories Brand</div>
+            <a class="biz-site" href="https://charcharms.com" target="_blank" rel="noopener">charcharms.com</a>
+          </div>
           <div class="detail-text">An ecommerce accessories brand owned by <b>Charlotte Trecartin</b>. Publicly listed this week, with multiple interested buyers in review. Seller's minimum threshold is <b>$5M cash at close</b>. 2.88x SDE multiple.</div>
           <div class="meta-strip">
             <div class="meta-item">
@@ -764,7 +800,10 @@
       </tr>
       <tr class="deal-detail" id="d-rb" hidden>
         <td colspan="5">
-          <div class="biz-type">Recipe Content Site · Affiliate Revenue</div>
+          <div class="biz-row">
+            <div class="biz-type">Recipe Content Site · Affiliate Revenue</div>
+            <a class="biz-site" href="https://realbalanced.com" target="_blank" rel="noopener">realbalanced.com</a>
+          </div>
           <div class="detail-text">A recipe content website with affiliate revenue (primarily through Raptive). Went live this week. Final SDE numbers being confirmed; owner Sara still finalizing March affiliate income figures.</div>
           <div class="meta-strip">
             <div class="meta-item">
@@ -800,7 +839,10 @@
       </tr>
       <tr class="deal-detail" id="d-rvnu" hidden>
         <td colspan="5">
-          <div class="biz-type">Advertising Agency · Mid-Market</div>
+          <div class="biz-row">
+            <div class="biz-type">Advertising Agency · Mid-Market</div>
+            <span class="biz-site tbd">website TBD</span>
+          </div>
           <div class="detail-text">A mid-market advertising agency owned by <b>Bryan</b>. <b>$5.8M in revenue with a 48% margin</b>, listing at $17M (6.07x SDE). Owner is fully committed; client interview ready. On deck to launch in the next listing window.</div>
           <div class="meta-strip">
             <div class="meta-item">
@@ -827,7 +869,10 @@
       </tr>
       <tr class="deal-detail" id="d-hex" hidden>
         <td colspan="5">
-          <div class="biz-type">Specialty Metal Art · Home Decor</div>
+          <div class="biz-row">
+            <div class="biz-type">Specialty Metal Art · Home Decor</div>
+            <a class="biz-site" href="https://hexheadart.com" target="_blank" rel="noopener">hexheadart.com</a>
+          </div>
           <div class="detail-text">A specialty metal art and home decor brand targeting a $9M list price. Preparing materials for launch; SDE and multiple still being confirmed before the official listing build kicks off.</div>
           <div class="meta-strip">
             <div class="meta-item">
@@ -854,7 +899,10 @@
       </tr>
       <tr class="deal-detail" id="d-evap" hidden>
         <td colspan="5">
-          <div class="biz-type">Consumer Electronics · Personal Coolers</div>
+          <div class="biz-row">
+            <div class="biz-type">Consumer Electronics · Personal Coolers</div>
+            <a class="biz-site" href="https://evapolar.com" target="_blank" rel="noopener">evapolar.com</a>
+          </div>
           <div class="detail-text">A consumer electronics brand making compact personal coolers. Owner <b>Eugene reclaimed the business in November 2025</b> after the first sale (~$3.8M) defaulted on the prior buyer. P&amp;L rebuild is underway; relist motion in progress.</div>
           <div class="meta-strip">
             <div class="meta-item">
@@ -881,7 +929,10 @@
       </tr>
       <tr class="deal-detail" id="d-spicy" hidden>
         <td colspan="5">
-          <div class="biz-type">Specialty Food Brand</div>
+          <div class="biz-row">
+            <div class="biz-type">Specialty Food Brand</div>
+            <a class="biz-site" href="https://spicycubes.co" target="_blank" rel="noopener">spicycubes.co</a>
+          </div>
           <div class="detail-text">A specialty food brand with confirmed SDE of approximately $660K. CIM is complete; launch is blocked on receipt of the 2025 tax return. Expecting a 3.0–3.8x multiple range at market.</div>
           <div class="meta-strip">
             <div class="meta-item">

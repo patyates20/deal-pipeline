@@ -18,7 +18,11 @@
     --mint:            #b8f7b8;
     --mint-soft:       rgba(184,247,184,0.14);
     --nomad-blue:      #297dde;
+    --nomad-blue-soft: rgba(41,125,222,0.18);
+    --freedom-teal:    #66e0f5;
     --green:           #36a157;
+    --risk:            #d97757;
+    --risk-soft:       rgba(217,119,87,0.16);
     --white:           #ffffff;
     --text-muted:      #8a96b0;
     --text-dim:        #c2c9d9;
@@ -39,34 +43,55 @@
     background: var(--bg);
     border-bottom: 1px solid var(--line);
     padding: 22px 40px;
-    display: flex; align-items: center; justify-content: space-between;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
   }
   .topbar-left { display: flex; align-items: center; gap: 16px; }
   .logo { display: block; height: 44px; width: auto; }
   .logo-wordmark {
-    font-weight: 800;
-    font-style: italic;
-    font-size: 20px;
-    letter-spacing: -0.01em;
-    line-height: 1;
+    font-weight: 800; font-style: italic; font-size: 20px;
+    letter-spacing: -0.01em; line-height: 1;
   }
   .logo-wordmark .quiet { color: var(--white); }
   .logo-wordmark .light { color: var(--mint); }
   .topbar-title { font-weight: 700; font-size: 16px; color: var(--text-muted); }
-  .topbar-right { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+  .topbar-right { display: flex; align-items: center; gap: 16px; }
+  .topbar-date { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+  .unlock-btn {
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    color: var(--text-muted);
+    font-size: 11px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: all 0.15s;
+  }
+  .unlock-btn:hover { color: var(--mint); border-color: var(--mint); }
+  .unlock-btn.unlocked { background: var(--mint-soft); color: var(--mint); border-color: var(--mint); }
 
   /* PAGE */
   .page { max-width: 1400px; margin: 0 auto; padding: 40px 40px 80px; }
-
-  .page-head { margin-bottom: 28px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+  .page-head { margin-bottom: 24px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
   .page-title {
     font-weight: 700;
     font-size: 38px;
     color: var(--white);
     letter-spacing: -0.02em;
     line-height: 1.1;
+    margin-bottom: 10px;
   }
   .page-title .accent { color: var(--mint); }
+  .page-sub {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .page-sub b { color: var(--mint); }
 
   /* DEAL TABLE */
   .deals-wrap {
@@ -82,9 +107,8 @@
     font-size: 13.5px;
     table-layout: fixed;
   }
-  /* Column widths — uniform spacing */
   table.deals col.c-name { width: auto; }
-  table.deals col.c-num { width: 14.5%; }
+  table.deals col.c-num { width: 17%; }
 
   table.deals thead th {
     background: var(--card-2);
@@ -185,11 +209,8 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* DEAL DATA ROWS — clickable, expandable */
-  tr.deal-data {
-    cursor: pointer;
-    transition: background 0.12s;
-  }
+  /* DEAL DATA ROWS */
+  tr.deal-data { cursor: pointer; transition: background 0.12s; }
   tr.deal-data:hover { background: rgba(184,247,184,0.04); }
   tr.deal-data .client-name {
     font-weight: 700;
@@ -216,7 +237,7 @@
     font-size: 12.5px;
   }
 
-  /* DEAL DETAIL ROW — expanded view */
+  /* DEAL DETAIL ROW */
   tr.deal-detail td {
     background: var(--card-2);
     padding: 14px 24px 22px !important;
@@ -237,8 +258,246 @@
     color: var(--text-dim);
     max-width: 980px;
     font-weight: 500;
+    margin-bottom: 16px;
   }
   tr.deal-detail .detail-text b { color: var(--white); font-weight: 700; }
+
+  /* META STRIP — Days in Stage / Next Milestone / Anchor Buyer */
+  .meta-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+  .meta-item {}
+  .meta-lbl {
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .meta-val {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.35;
+  }
+  .meta-val.dim { color: var(--text-muted); font-weight: 500; font-style: italic; }
+
+  /* ===== GATED CONTENT (Pat-only) ===== */
+  #gated-content { display: none; }
+  #gated-content.unlocked { display: block; }
+
+  .sec {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin: 36px 0 16px;
+  }
+  .sec h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.01em;
+  }
+  .sec-meta { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+
+  /* TASK LIST — 4 columns */
+  .tasks-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .task-col {
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    max-height: 540px;
+    position: relative;
+  }
+  .task-col::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  }
+  .task-col.ql::before  { background: var(--mint); }
+  .task-col.hfs::before { background: var(--nomad-blue); }
+  .task-col.tra::before { background: var(--freedom-teal); }
+  .task-col.per::before { background: var(--text-dim); }
+
+  .task-col-head {
+    padding: 20px 22px 14px;
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .task-col-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.01em;
+  }
+  .task-col-name .col-sub {
+    display: block;
+    font-size: 10.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+  .task-col-tag {
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  .task-col.ql  .task-col-tag { background: var(--mint-soft);          color: var(--mint); }
+  .task-col.hfs .task-col-tag { background: var(--nomad-blue-soft);    color: var(--nomad-blue); }
+  .task-col.tra .task-col-tag { background: rgba(102,224,245,0.16);    color: var(--freedom-teal); }
+  .task-col.per .task-col-tag { background: rgba(138,150,176,0.16);    color: var(--text-dim); }
+
+  .task-col-body {
+    padding: 8px 22px 18px;
+    overflow-y: auto;
+    flex: 1;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+  .task-col-body::-webkit-scrollbar { width: 6px; }
+  .task-col-body::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 3px; }
+
+  .task-section {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: 800;
+    color: var(--text-muted);
+    margin: 14px 0 4px;
+    padding-bottom: 4px;
+    border-bottom: 1px dashed var(--line-strong);
+  }
+  .task-section:first-child { margin-top: 4px; }
+  .task-section.p0 { color: var(--risk); }
+  .task-section.p1 { color: var(--nomad-blue); }
+  .task-section.watch { color: var(--text-dim); }
+
+  .task {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .task:last-of-type { border-bottom: none; }
+  .task input[type="checkbox"] {
+    margin-top: 3px;
+    width: 14px; height: 14px;
+    accent-color: var(--mint);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .task .task-text { flex: 1; color: var(--white); }
+  .task.checked .task-text { text-decoration: line-through; color: var(--text-muted); }
+  .client-tag {
+    display: inline-block;
+    background: var(--mint-soft);
+    color: var(--mint);
+    font-size: 9.5px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-weight: 700;
+    margin-right: 5px;
+    letter-spacing: 0.04em;
+    vertical-align: 1px;
+    text-transform: uppercase;
+  }
+  .client-tag.risk { background: var(--risk-soft); color: var(--risk); }
+  .urgent-tag {
+    display: inline-block;
+    background: var(--risk);
+    color: var(--white);
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-weight: 800;
+    margin-left: 4px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    vertical-align: 1px;
+  }
+  .task-empty {
+    padding: 26px 8px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.55;
+  }
+  .task-empty .icon { font-size: 22px; margin-bottom: 8px; opacity: 0.4; }
+  .task code {
+    background: rgba(255,255,255,0.06);
+    padding: 2px 6px;
+    font-size: 11px;
+    color: var(--mint);
+    border-radius: 3px;
+  }
+
+  /* CORPORATE DIRECTORY */
+  .corp-wrap {
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    padding: 28px;
+    margin-bottom: 28px;
+  }
+  .corp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 22px;
+  }
+  .corp-cat-title {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--mint);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .corp-contact {
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .corp-contact:last-child { border-bottom: none; }
+  .corp-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .corp-role {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .corp-meta {
+    font-size: 11.5px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+  .corp-meta a { color: var(--mint); text-decoration: none; }
+  .corp-meta a:hover { text-decoration: underline; }
+  .corp-tbd {
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 11px;
+  }
 
   /* FOOTER */
   .footer {
@@ -262,81 +521,59 @@
     .topbar { padding: 18px 22px; }
     table.deals { font-size: 12.5px; }
     table.deals td { padding: 13px 12px; }
+    .tasks-grid { grid-template-columns: repeat(2, 1fr); }
+    .task-col { max-height: 420px; }
   }
 
-  /* PHONE — portrait + landscape */
+  /* PHONE */
   @media (max-width: 760px) {
-    /* Topbar — compact, hide the redundant "Deal Pipeline" subtitle */
-    .topbar {
-      padding: 12px 16px;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
+    .topbar { padding: 12px 16px; flex-wrap: wrap; gap: 6px; }
     .topbar-title { display: none; }
-    .topbar-right { font-size: 10px; letter-spacing: 0.06em; }
+    .topbar-date { font-size: 10px; letter-spacing: 0.06em; }
     .topbar-left { gap: 10px; }
     .logo { height: 34px; }
     .logo-wordmark { font-size: 16px; }
+    .unlock-btn { font-size: 9.5px; padding: 6px 10px; letter-spacing: 0.08em; }
 
-    /* Page */
     .page { padding: 18px 12px 40px; }
     .page-head { margin-bottom: 18px; padding-bottom: 14px; }
     .page-title { font-size: 20px; line-height: 1.2; letter-spacing: -0.01em; }
+    .page-sub { font-size: 11px; }
 
-    /* Deal table — horizontal scroll on phones */
-    .deals-wrap {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      border-radius: 12px;
-    }
-    table.deals {
-      min-width: 720px;
-      font-size: 12px;
-      table-layout: auto;
-    }
+    .deals-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 12px; }
+    table.deals { min-width: 640px; font-size: 12px; table-layout: auto; }
     table.deals colgroup col { width: auto !important; }
-    table.deals thead th {
-      padding: 11px 10px;
-      font-size: 9.5px;
-      letter-spacing: 0.08em;
-    }
+    table.deals thead th { padding: 11px 10px; font-size: 9.5px; letter-spacing: 0.08em; }
     table.deals td { padding: 12px 10px; }
     table.deals td.num { font-size: 12.5px; }
-
-    /* Deal rows */
     tr.deal-data .client-name { font-size: 13.5px; gap: 6px; }
     tr.deal-data .expand-arrow { font-size: 10px; }
 
-    /* Group rows — tighter, smaller circle */
     .grp-row td { padding: 11px 10px !important; }
     .grp-row .grp-label { font-size: 11px; letter-spacing: 0.14em; gap: 10px; }
-    .grp-row .grp-count {
-      width: 22px; height: 22px; font-size: 11.5px;
-    }
+    .grp-row .grp-count { width: 22px; height: 22px; font-size: 11.5px; }
     .grp-row td.num { font-size: 12.5px; }
 
-    /* Grand row — still prominent but compact */
     .grand-row td { padding: 14px 10px !important; }
     .grand-row .grand-label { font-size: 12px; letter-spacing: 0.16em; gap: 10px; }
-    .grand-row .grand-count {
-      width: 24px; height: 24px; font-size: 12px;
-    }
+    .grand-row .grand-count { width: 24px; height: 24px; font-size: 12px; }
     .grand-row td.num { font-size: 13.5px; }
 
-    /* Detail expand panels */
-    tr.deal-detail td { padding: 12px 16px 18px !important; }
+    tr.deal-detail td { padding: 12px 14px 18px !important; }
     tr.deal-detail .biz-type { font-size: 10px; letter-spacing: 0.12em; }
     tr.deal-detail .detail-text { font-size: 12.5px; line-height: 1.6; }
+    .meta-strip { grid-template-columns: 1fr; gap: 10px; }
+
+    .tasks-grid { grid-template-columns: 1fr; }
   }
 
-  /* TINY phones — iPhone SE portrait */
   @media (max-width: 400px) {
     .page-title { font-size: 18px; }
     .topbar { padding: 10px 14px; }
     .logo { height: 32px; }
     .logo-wordmark { font-size: 15px; }
     .page { padding: 14px 8px 30px; }
-    table.deals { min-width: 680px; font-size: 11.5px; }
+    table.deals { min-width: 600px; font-size: 11.5px; }
   }
 </style>
 </head>
@@ -349,7 +586,10 @@
     <div class="logo-wordmark"><span class="quiet">Quiet</span><span class="light">Light</span></div>
   </div>
   <div class="topbar-title">Deal Pipeline</div>
-  <div class="topbar-right">Updated May 28, 2026</div>
+  <div class="topbar-right">
+    <div class="topbar-date">Updated May 28, 2026</div>
+    <button class="unlock-btn" id="unlockBtn">🔒 Pat's view</button>
+  </div>
 </div>
 
 <div class="page">
@@ -357,6 +597,7 @@
   <!-- HEAD -->
   <div class="page-head">
     <div class="page-title">Pat Yates <span class="accent">·</span> Quiet Light Pipeline</div>
+    <div class="page-sub">Commission columns show your <b>50% take</b> · multiply × 2 for total QL gross</div>
   </div>
 
   <!-- DEAL PIPELINE -->
@@ -368,26 +609,23 @@
       <col class="c-num">
       <col class="c-num">
       <col class="c-num">
-      <col class="c-num">
     </colgroup>
     <thead>
       <tr>
         <th></th>
         <th class="num">List Price</th>
         <th class="num">SDE</th>
-        <th class="num">Total QL Commission</th>
-        <th class="num">Pat Close Commission</th>
-        <th class="num">Deferred Commission</th>
+        <th class="num">Cash @ Close</th>
+        <th class="num">Deferred</th>
       </tr>
     </thead>
     <tbody>
 
-      <!-- GRAND TOTAL — at top -->
+      <!-- GRAND TOTAL -->
       <tr class="grand-row">
         <td><span class="grand-label">All Pipeline <span class="grand-count">9</span></span></td>
         <td class="num">$ 83,925,000+</td>
         <td class="num">$ 13,910,000+</td>
-        <td class="num">$ 4,757,000+</td>
         <td class="num">$ 2,077,500+</td>
         <td class="num">$ 308,000</td>
       </tr>
@@ -397,7 +635,6 @@
         <td><div class="grp-label">Under Offer <span class="grp-count">3</span></div></td>
         <td class="num">$ 45,550,000</td>
         <td class="num">$ 8,050,000</td>
-        <td class="num">$ 2,467,000</td>
         <td class="num">$ 931,500</td>
         <td class="num">$ 308,000</td>
       </tr>
@@ -405,42 +642,81 @@
         <td><div class="client-name"><span class="expand-arrow">▶</span>ChartPrime</div></td>
         <td class="num list-val">$ 32,500,000</td>
         <td class="num">$ 4,530,000</td>
-        <td class="num">$ 1,625,000</td>
         <td class="num cash-val">$ 562,500</td>
         <td class="num cash-val">$ 250,000</td>
       </tr>
       <tr class="deal-detail" id="d-chart" hidden>
-        <td colspan="6">
+        <td colspan="5">
           <div class="biz-type">Software-as-a-Service · Trading Platform</div>
-          <div class="detail-text">A SaaS trading analytics platform serving professional traders, with subscription-based revenue, strong margins, and an established customer base. Founders <b>Loyal Companies</b> are in active diligence with quality-of-earnings firm Tanner LLP, targeting close <b>July 28, 2026</b>. Listed at $32.5M with a 7.18x SDE multiple. Structured at 5% flat commission rate, with <b>$22.5M cash at close (equity roll included)</b> and <b>$10M seller financed</b>.</div>
+          <div class="detail-text">A SaaS trading analytics platform serving professional traders, with subscription-based revenue, strong margins, and an established customer base. Founders <b>Loyal Companies</b> are in active diligence with quality-of-earnings firm Tanner LLP. Listed at $32.5M with a 7.18x SDE multiple. Structured at <b>5% flat commission</b> rate, with $22.5M cash at close (equity roll included) and $10M seller financed.</div>
+          <div class="meta-strip">
+            <div class="meta-item">
+              <div class="meta-lbl">Days in Stage</div>
+              <div class="meta-val">~30 days</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Next Milestone</div>
+              <div class="meta-val">Target Close · Jul 28</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Anchor Buyer</div>
+              <div class="meta-val">Loyal Companies</div>
+            </div>
+          </div>
         </td>
       </tr>
       <tr class="deal-data" data-expand="d-light">
         <td><div class="client-name"><span class="expand-arrow">▶</span>Light Armor</div></td>
         <td class="num list-val">$ 10,950,000</td>
         <td class="num">$ 2,770,000</td>
-        <td class="num">$ 650,000</td>
         <td class="num cash-val">$ 276,000</td>
         <td class="num cash-val">$ 49,000</td>
       </tr>
       <tr class="deal-detail" id="d-light" hidden>
-        <td colspan="6">
+        <td colspan="5">
           <div class="biz-type">Protective Products Brand · Inventory Included</div>
-          <div class="detail-text">A direct-to-consumer protective products brand with a strong <b>57% margin</b> and established channels. Buyer <b>Cooper Truss signed LOI April 29</b>, with backup buyer AZL Tech standing by at ask price. Diligence call this Friday. Estimated 85% cash at close with a seller note of approximately $1.6M.</div>
+          <div class="detail-text">A direct-to-consumer protective products brand with a strong <b>57% margin</b> and established channels. Buyer <b>Cooper Truss</b> signed LOI April 29; backup buyer AZL Tech standing by at ask price. Estimated 85% cash at close with a seller note of approximately $1.6M.</div>
+          <div class="meta-strip">
+            <div class="meta-item">
+              <div class="meta-lbl">Days in Stage</div>
+              <div class="meta-val">29 days</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Next Milestone</div>
+              <div class="meta-val">Diligence Call · Fri May 31</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Anchor Buyer</div>
+              <div class="meta-val">Cooper Truss</div>
+            </div>
+          </div>
         </td>
       </tr>
       <tr class="deal-data" data-expand="d-mvrk">
         <td><div class="client-name"><span class="expand-arrow">▶</span>MVRK</div></td>
         <td class="num list-val">$ 2,100,000</td>
         <td class="num">$ 753,000</td>
-        <td class="num">$ 192,000</td>
         <td class="num cash-val">$ 93,000</td>
         <td class="num cash-val">$ 9,000</td>
       </tr>
       <tr class="deal-detail" id="d-mvrk" hidden>
-        <td colspan="6">
+        <td colspan="5">
           <div class="biz-type">Amazon FBA · Fitness Brand</div>
           <div class="detail-text">An Amazon FBA fitness brand specializing in weighted vests and tactical chest packs. Counter on the table at <b>$2M business + $200K seller note (1yr @ 4%) + inventory</b>, with SBA-backed operator <b>Mark Brooks (Applied Vision Baseball)</b> as the lead buyer. Awaiting response on the counter. Multiple backup buyers active.</div>
+          <div class="meta-strip">
+            <div class="meta-item">
+              <div class="meta-lbl">Days in Stage</div>
+              <div class="meta-val">43 days</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Next Milestone</div>
+              <div class="meta-val">Hard close on Brooks counter</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Anchor Buyer</div>
+              <div class="meta-val">Mark Brooks · Applied Vision Baseball</div>
+            </div>
+          </div>
         </td>
       </tr>
 
@@ -449,7 +725,6 @@
         <td><div class="grp-label">Active / Live <span class="grp-count">2</span></div></td>
         <td class="num">$ 7,075,000</td>
         <td class="num">$ 2,400,000+</td>
-        <td class="num">$ 472,000</td>
         <td class="num">$ 237,000</td>
         <td class="num">—</td>
       </tr>
@@ -457,28 +732,54 @@
         <td><div class="client-name"><span class="expand-arrow">▶</span>CharCharms</div></td>
         <td class="num list-val">$ 6,900,000</td>
         <td class="num">$ 2,400,000</td>
-        <td class="num">$ 455,000</td>
         <td class="num cash-val">$ 228,000</td>
         <td class="num">—</td>
       </tr>
       <tr class="deal-detail" id="d-char" hidden>
-        <td colspan="6">
+        <td colspan="5">
           <div class="biz-type">Ecommerce · Accessories Brand</div>
-          <div class="detail-text">An ecommerce accessories brand owned by <b>Charlotte Trecartin</b>. Publicly listed this week, with multiple interested buyers in review. Seller's minimum threshold is <b>$5M cash at close</b>. 2.88x SDE multiple. SBA pre-qualification in progress with Joe McAleer / Multifunding.</div>
+          <div class="detail-text">An ecommerce accessories brand owned by <b>Charlotte Trecartin</b>. Publicly listed this week, with multiple interested buyers in review. Seller's minimum threshold is <b>$5M cash at close</b>. 2.88x SDE multiple.</div>
+          <div class="meta-strip">
+            <div class="meta-item">
+              <div class="meta-lbl">Days in Stage</div>
+              <div class="meta-val">7 days</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Next Milestone</div>
+              <div class="meta-val">Buyer reviews · this week</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Inbound Interest</div>
+              <div class="meta-val">Brian Wong · Casetify</div>
+            </div>
+          </div>
         </td>
       </tr>
       <tr class="deal-data" data-expand="d-rb">
         <td><div class="client-name"><span class="expand-arrow">▶</span>Real Balanced</div></td>
         <td class="num list-val">$ 175,000</td>
         <td class="num"><span class="tbd">finalizing</span></td>
-        <td class="num">$ 17,500</td>
         <td class="num cash-val">$ 9,000</td>
         <td class="num">—</td>
       </tr>
       <tr class="deal-detail" id="d-rb" hidden>
-        <td colspan="6">
+        <td colspan="5">
           <div class="biz-type">Recipe Content Site · Affiliate Revenue</div>
           <div class="detail-text">A recipe content website with affiliate revenue (primarily through Raptive). Went live this week. Final SDE numbers being confirmed; owner Sara still finalizing March affiliate income figures.</div>
+          <div class="meta-strip">
+            <div class="meta-item">
+              <div class="meta-lbl">Days in Stage</div>
+              <div class="meta-val">7 days</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Next Milestone</div>
+              <div class="meta-val">Lock March affiliate #</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Owner</div>
+              <div class="meta-val">Sara Nelson</div>
+            </div>
+          </div>
         </td>
       </tr>
 
@@ -487,7 +788,6 @@
         <td><div class="grp-label">Preparing &amp; On Deck <span class="grp-count">4</span></div></td>
         <td class="num">$ 31,300,000+</td>
         <td class="num">$ 3,460,000+</td>
-        <td class="num">$ 1,818,000+</td>
         <td class="num">$ 909,000+</td>
         <td class="num">—</td>
       </tr>
@@ -495,62 +795,335 @@
         <td><div class="client-name"><span class="expand-arrow">▶</span>RVNU</div></td>
         <td class="num list-val">$ 17,000,000</td>
         <td class="num">$ 2,800,000</td>
-        <td class="num">$ 800,000</td>
         <td class="num cash-val">$ 400,000</td>
         <td class="num">—</td>
       </tr>
       <tr class="deal-detail" id="d-rvnu" hidden>
-        <td colspan="6">
+        <td colspan="5">
           <div class="biz-type">Advertising Agency · Mid-Market</div>
           <div class="detail-text">A mid-market advertising agency owned by <b>Bryan</b>. <b>$5.8M in revenue with a 48% margin</b>, listing at $17M (6.07x SDE). Owner is fully committed; client interview ready. On deck to launch in the next listing window.</div>
+          <div class="meta-strip">
+            <div class="meta-item">
+              <div class="meta-lbl">Status</div>
+              <div class="meta-val">Sized · ready to build</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Next Milestone</div>
+              <div class="meta-val">Launch · next window</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Owner</div>
+              <div class="meta-val">Bryan</div>
+            </div>
+          </div>
         </td>
       </tr>
       <tr class="deal-data" data-expand="d-hex">
         <td><div class="client-name"><span class="expand-arrow">▶</span>Hex Head Art</div></td>
         <td class="num list-val">$ 9,000,000</td>
         <td class="num"><span class="tbd">TBD</span></td>
-        <td class="num">$ 550,000</td>
         <td class="num cash-val">$ 275,000</td>
         <td class="num">—</td>
       </tr>
       <tr class="deal-detail" id="d-hex" hidden>
-        <td colspan="6">
+        <td colspan="5">
           <div class="biz-type">Specialty Metal Art · Home Decor</div>
           <div class="detail-text">A specialty metal art and home decor brand targeting a $9M list price. Preparing materials for launch; SDE and multiple still being confirmed before the official listing build kicks off.</div>
+          <div class="meta-strip">
+            <div class="meta-item">
+              <div class="meta-lbl">Status</div>
+              <div class="meta-val">Awaiting financials</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Next Milestone</div>
+              <div class="meta-val">Confirm SDE &amp; multiple</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Owner</div>
+              <div class="meta-val"><span class="meta-val dim">TBD</span></div>
+            </div>
+          </div>
         </td>
       </tr>
       <tr class="deal-data" data-expand="d-evap">
         <td><div class="client-name"><span class="expand-arrow">▶</span>Evapolar</div></td>
         <td class="num list-val">$ 3,000,000</td>
         <td class="num"><span class="tbd">rebuilding</span></td>
-        <td class="num">$ 270,000</td>
         <td class="num cash-val">$ 135,000</td>
         <td class="num">—</td>
       </tr>
       <tr class="deal-detail" id="d-evap" hidden>
-        <td colspan="6">
+        <td colspan="5">
           <div class="biz-type">Consumer Electronics · Personal Coolers</div>
           <div class="detail-text">A consumer electronics brand making compact personal coolers. Owner <b>Eugene reclaimed the business in November 2025</b> after the first sale (~$3.8M) defaulted on the prior buyer. P&amp;L rebuild is underway; relist motion in progress.</div>
+          <div class="meta-strip">
+            <div class="meta-item">
+              <div class="meta-lbl">Status</div>
+              <div class="meta-val">P&amp;L rebuild</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Next Milestone</div>
+              <div class="meta-val">Finish P&amp;L · then build CIM</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Owner</div>
+              <div class="meta-val">Eugene</div>
+            </div>
+          </div>
         </td>
       </tr>
       <tr class="deal-data" data-expand="d-spicy">
         <td><div class="client-name"><span class="expand-arrow">▶</span>Spicy Cubes</div></td>
         <td class="num list-val">$ 2,300,000</td>
         <td class="num">$ 660,000</td>
-        <td class="num">$ 198,000</td>
         <td class="num cash-val">$ 99,000</td>
         <td class="num">—</td>
       </tr>
       <tr class="deal-detail" id="d-spicy" hidden>
-        <td colspan="6">
+        <td colspan="5">
           <div class="biz-type">Specialty Food Brand</div>
           <div class="detail-text">A specialty food brand with confirmed SDE of approximately $660K. CIM is complete; launch is blocked on receipt of the 2025 tax return. Expecting a 3.0–3.8x multiple range at market.</div>
+          <div class="meta-strip">
+            <div class="meta-item">
+              <div class="meta-lbl">Status</div>
+              <div class="meta-val">CIM done · blocked on tax</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Next Milestone</div>
+              <div class="meta-val">Receive 2025 tax return</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-lbl">Owner</div>
+              <div class="meta-val">Roberto Noel</div>
+            </div>
+          </div>
         </td>
       </tr>
 
     </tbody>
   </table>
   </div>
+
+  <!-- ===== GATED: TASKS + CORPORATE DIRECTORY ===== -->
+  <div id="gated-content">
+
+    <!-- TASKS -->
+    <div class="sec">
+      <h2>Task List</h2>
+      <div class="sec-meta">By business · scroll each column independently</div>
+    </div>
+
+    <div class="tasks-grid">
+
+      <!-- QUIET LIGHT -->
+      <div class="task-col ql">
+        <div class="task-col-head">
+          <div class="task-col-name">Quiet Light<span class="col-sub">M&amp;A · primary</span></div>
+          <div class="task-col-tag" id="p0-count">22</div>
+        </div>
+        <div class="task-col-body">
+          <div class="task-section p0">P0 · Today / Tomorrow AM</div>
+          <div class="task"><input type="checkbox" id="t1"><label for="t1" class="task-text"><span class="client-tag">CharCharms</span>Push listing live this week — Charlotte reviewing<span class="urgent-tag">Client</span></label></div>
+          <div class="task"><input type="checkbox" id="t2"><label for="t2" class="task-text"><span class="client-tag risk">CharCharms</span>DELETE the draft with <code>[PASTE VIDEO LINK]</code> still in it<span class="urgent-tag">Risk</span></label></div>
+          <div class="task"><input type="checkbox" id="t3"><label for="t3" class="task-text"><span class="client-tag">Light Armor</span>Prep + chase Mike Wirth for Friday 11am diligence call<span class="urgent-tag">Fri</span></label></div>
+          <div class="task"><input type="checkbox" id="t4"><label for="t4" class="task-text"><span class="client-tag">CharCharms</span>Reply Brian Wong (Casetify) — Charlotte intro'd, send NDA + teaser</label></div>
+          <div class="task"><input type="checkbox" id="t5"><label for="t5" class="task-text"><span class="client-tag">CharCharms</span>Ping Joe McAleer on SBA pre-qual — 5 weeks stale</label></div>
+          <div class="task"><input type="checkbox" id="t6"><label for="t6" class="task-text"><span class="client-tag">MVRK</span>Hard close Mark Brooks on the counter — 43 days silent</label></div>
+          <div class="task"><input type="checkbox" id="t7"><label for="t7" class="task-text"><span class="client-tag">ChartPrime</span>QoE check-in with Tanner LLP — keep diligence on track for 7/28</label></div>
+
+          <div class="task-section p1">P1 · This Week</div>
+          <div class="task"><input type="checkbox" id="t10"><label for="t10" class="task-text"><span class="client-tag">RVNU</span>Launch prep · client interview build</label></div>
+          <div class="task"><input type="checkbox" id="t11"><label for="t11" class="task-text"><span class="client-tag">Real Balanced</span>Chase Sara's March affiliate number — blocks SDE lock</label></div>
+          <div class="task"><input type="checkbox" id="t12"><label for="t12" class="task-text"><span class="client-tag">Spicy Cubes</span>Complete SDE rework with raw QB data</label></div>
+          <div class="task"><input type="checkbox" id="t13"><label for="t13" class="task-text"><span class="client-tag">Hex Head Art</span>Get SDE + multiple confirmed before listing build</label></div>
+          <div class="task"><input type="checkbox" id="t14"><label for="t14" class="task-text"><span class="client-tag">Evapolar</span>Eugene's P&amp;L rebuild — check progress weekly</label></div>
+          <div class="task"><input type="checkbox" id="t15"><label for="t15" class="task-text">Jeff Hora (Maverick buyer) — Calendly, "next week" meeting promised 5/19</label></div>
+          <div class="task"><input type="checkbox" id="t16"><label for="t16" class="task-text">Edoardo Maggini (Powder Coating buyer) — send NDA</label></div>
+
+          <div class="task-section watch">Stale + Watch</div>
+          <div class="task"><input type="checkbox" id="t20"><label for="t20" class="task-text"><span class="client-tag risk">Omaeon</span>Iryna silent on fee-based rebuild offer. Push or close.</label></div>
+          <div class="task"><input type="checkbox" id="t21"><label for="t21" class="task-text"><span class="client-tag risk">Equipping ELL's</span>Seller silent since 3/10. Final email or release.</label></div>
+          <div class="task"><input type="checkbox" id="t22"><label for="t22" class="task-text"><span class="client-tag risk">Scrap.io</span>Zero deal activity. Delete or reconcile.</label></div>
+          <div class="task"><input type="checkbox" id="t23"><label for="t23" class="task-text"><span class="client-tag">By Madee</span>Calendar reminder for Q1 2027 relaunch</label></div>
+          <div class="task"><input type="checkbox" id="t24"><label for="t24" class="task-text"><span class="client-tag">YunaPro</span>Long-term hold — revisit post any pricing shift</label></div>
+          <div class="task"><input type="checkbox" id="t25"><label for="t25" class="task-text"><span class="client-tag">Half Price Drapes</span>Hold until July 2026 P&amp;L</label></div>
+          <div class="task"><input type="checkbox" id="t26"><label for="t26" class="task-text"><span class="client-tag">Tenscope</span>Closed · post-mortem learnings if any</label></div>
+        </div>
+      </div>
+
+      <div class="task-col hfs">
+        <div class="task-col-head">
+          <div class="task-col-name">HappyFeet Slippers<span class="col-sub">Operating biz · since 1996</span></div>
+          <div class="task-col-tag">0</div>
+        </div>
+        <div class="task-col-body">
+          <div class="task-empty">
+            <div class="icon">+</div>
+            No tasks added yet.<br>
+            Drop in HFS ops, Amazon, kiosk program, licensing, or Robert's team items.
+          </div>
+        </div>
+      </div>
+
+      <div class="task-col tra">
+        <div class="task-col-head">
+          <div class="task-col-name">Tracelot<span class="col-sub">Side project</span></div>
+          <div class="task-col-tag">0</div>
+        </div>
+        <div class="task-col-body">
+          <div class="task-empty">
+            <div class="icon">+</div>
+            No tasks added yet.
+          </div>
+        </div>
+      </div>
+
+      <div class="task-col per">
+        <div class="task-col-head">
+          <div class="task-col-name">Personal<span class="col-sub">Pat &amp; Sandy · life</span></div>
+          <div class="task-col-tag">0</div>
+        </div>
+        <div class="task-col-body">
+          <div class="task-empty">
+            <div class="icon">+</div>
+            No tasks added yet.<br>
+            Anniversary, golf, FBB content, family.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CORPORATE DIRECTORY -->
+    <div class="sec">
+      <h2>Corporate Directory</h2>
+      <div class="sec-meta">Key contacts · add as you go</div>
+    </div>
+
+    <div class="corp-wrap">
+      <div class="corp-grid">
+
+        <div class="corp-cat">
+          <div class="corp-cat-title">Quiet Light Team</div>
+          <div class="corp-contact">
+            <div class="corp-name">Mark Daoust</div>
+            <div class="corp-role">CEO &amp; Founder</div>
+            <div class="corp-meta"><span class="corp-tbd">Add email · phone</span></div>
+          </div>
+          <div class="corp-contact">
+            <div class="corp-name">Chuck Mullins</div>
+            <div class="corp-role">Senior Advisor</div>
+            <div class="corp-meta"><span class="corp-tbd">Add email · phone</span></div>
+          </div>
+          <div class="corp-contact">
+            <div class="corp-name">Charlotte Trecartin</div>
+            <div class="corp-role">Operations / Owner Coordination</div>
+            <div class="corp-meta"><span class="corp-tbd">Add email · phone</span></div>
+          </div>
+          <div class="corp-contact">
+            <div class="corp-name">Elora Kask</div>
+            <div class="corp-role">Operations</div>
+            <div class="corp-meta"><span class="corp-tbd">Add email · phone</span></div>
+          </div>
+        </div>
+
+        <div class="corp-cat">
+          <div class="corp-cat-title">Service Providers</div>
+          <div class="corp-contact">
+            <div class="corp-name">Shawn Hussain</div>
+            <div class="corp-role">Attorney · Ecomm Law Group</div>
+            <div class="corp-meta"><span class="corp-tbd">Add email · phone</span></div>
+          </div>
+          <div class="corp-contact">
+            <div class="corp-name">Bill McGlade</div>
+            <div class="corp-role">Attorney</div>
+            <div class="corp-meta"><span class="corp-tbd">Add email · phone</span></div>
+          </div>
+          <div class="corp-contact">
+            <div class="corp-name">Joe McAleer</div>
+            <div class="corp-role">SBA Lender · Multifunding</div>
+            <div class="corp-meta"><span class="corp-tbd">Add email · phone</span></div>
+          </div>
+          <div class="corp-contact">
+            <div class="corp-name">Tanner LLP</div>
+            <div class="corp-role">Quality of Earnings · ChartPrime</div>
+            <div class="corp-meta"><span class="corp-tbd">Add contact</span></div>
+          </div>
+        </div>
+
+        <div class="corp-cat">
+          <div class="corp-cat-title">Active Buyers</div>
+          <div class="corp-contact">
+            <div class="corp-name">Cooper Truss</div>
+            <div class="corp-role">Light Armor · LOI signed 4/29</div>
+            <div class="corp-meta"><span class="corp-tbd">Add email · phone</span></div>
+          </div>
+          <div class="corp-contact">
+            <div class="corp-name">Mark Brooks</div>
+            <div class="corp-role">MVRK · Applied Vision Baseball · SBA</div>
+            <div class="corp-meta">mark@vzn.ventures</div>
+          </div>
+          <div class="corp-contact">
+            <div class="corp-name">Brian Wong</div>
+            <div class="corp-role">CharCharms inbound · Casetify</div>
+            <div class="corp-meta"><span class="corp-tbd">Add email</span></div>
+          </div>
+          <div class="corp-contact">
+            <div class="corp-name">Jeff Hora</div>
+            <div class="corp-role">Maverick buyer</div>
+            <div class="corp-meta"><span class="corp-tbd">Add email · phone</span></div>
+          </div>
+        </div>
+
+        <div class="corp-cat">
+          <div class="corp-cat-title">Current Sellers</div>
+          <div class="corp-contact">
+            <div class="corp-name">Loyal Companies</div>
+            <div class="corp-role">ChartPrime founders</div>
+            <div class="corp-meta"><span class="corp-tbd">Add primary contact</span></div>
+          </div>
+          <div class="corp-contact">
+            <div class="corp-name">Mike Wirth</div>
+            <div class="corp-role">Light Armor</div>
+            <div class="corp-meta"><span class="corp-tbd">Add email · phone</span></div>
+          </div>
+          <div class="corp-contact">
+            <div class="corp-name">Emanuel Ruiz / Brad</div>
+            <div class="corp-role">MVRK · Sellers</div>
+            <div class="corp-meta">emanuel@emanla.com · brad@ustopimporters.com</div>
+          </div>
+          <div class="corp-contact">
+            <div class="corp-name">Charlotte Trecartin</div>
+            <div class="corp-role">CharCharms · Owner</div>
+            <div class="corp-meta"><span class="corp-tbd">Add email · phone</span></div>
+          </div>
+          <div class="corp-contact">
+            <div class="corp-name">Sara Nelson</div>
+            <div class="corp-role">Real Balanced · Owner</div>
+            <div class="corp-meta"><span class="corp-tbd">Add email · phone</span></div>
+          </div>
+          <div class="corp-contact">
+            <div class="corp-name">Bryan</div>
+            <div class="corp-role">RVNU · Owner</div>
+            <div class="corp-meta"><span class="corp-tbd">Add email · phone</span></div>
+          </div>
+          <div class="corp-contact">
+            <div class="corp-name">Eugene</div>
+            <div class="corp-role">Evapolar · Owner (reclaimed Nov '25)</div>
+            <div class="corp-meta"><span class="corp-tbd">Add email · phone</span></div>
+          </div>
+          <div class="corp-contact">
+            <div class="corp-name">Roberto Noel</div>
+            <div class="corp-role">Spicy Cubes · Owner</div>
+            <div class="corp-meta"><span class="corp-tbd">Add email · phone</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <!-- ===== END GATED ===== -->
 
   <!-- FOOTER -->
   <div class="footer">
@@ -560,7 +1133,7 @@
 </div>
 
 <script>
-// Toggle expandable deal detail rows
+// === Deal pipeline expand/collapse ===
 document.querySelectorAll('tr.deal-data').forEach(row => {
   row.addEventListener('click', () => {
     const id = row.dataset.expand;
@@ -570,6 +1143,63 @@ document.querySelectorAll('tr.deal-data').forEach(row => {
     detail.hidden = !detail.hidden;
     row.classList.toggle('expanded');
   });
+});
+
+// === Task checkbox persistence ===
+(function() {
+  const KEY = 'pat-tasks-checked';
+  const checks = JSON.parse(localStorage.getItem(KEY) || '{}');
+  document.querySelectorAll('.task input[type="checkbox"]').forEach(cb => {
+    if (checks[cb.id]) {
+      cb.checked = true;
+      cb.closest('.task').classList.add('checked');
+    }
+    cb.addEventListener('change', () => {
+      const cur = JSON.parse(localStorage.getItem(KEY) || '{}');
+      if (cb.checked) {
+        cur[cb.id] = true;
+        cb.closest('.task').classList.add('checked');
+      } else {
+        delete cur[cb.id];
+        cb.closest('.task').classList.remove('checked');
+      }
+      localStorage.setItem(KEY, JSON.stringify(cur));
+    });
+  });
+})();
+
+// === Password gate ===
+// TO CHANGE PASSWORD: edit the value of PASSWORD below, re-save, re-upload to GitHub.
+const PASSWORD = 'yates2026';
+const UNLOCK_KEY = 'pyl-unlocked';
+const gated = document.getElementById('gated-content');
+const btn = document.getElementById('unlockBtn');
+
+function unlock() {
+  gated.classList.add('unlocked');
+  btn.textContent = '🔓 Pat\'s view';
+  btn.classList.add('unlocked');
+}
+function lock() {
+  gated.classList.remove('unlocked');
+  btn.textContent = '🔒 Pat\'s view';
+  btn.classList.remove('unlocked');
+  localStorage.removeItem(UNLOCK_KEY);
+}
+if (localStorage.getItem(UNLOCK_KEY) === '1') unlock();
+
+btn.addEventListener('click', () => {
+  if (localStorage.getItem(UNLOCK_KEY) === '1') {
+    if (confirm('Lock Pat\'s view again?')) lock();
+    return;
+  }
+  const input = prompt('Password:');
+  if (input === PASSWORD) {
+    localStorage.setItem(UNLOCK_KEY, '1');
+    unlock();
+  } else if (input !== null) {
+    alert('Wrong password.');
+  }
 });
 </script>
 </body>
